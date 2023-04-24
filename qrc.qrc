@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/bar.jpg</file>
+        <file>images/login.jpg</file>
+        <file>images/search.jpg</file>
+        <file>images/title.jpg</file>
+        <file>images/tool.jpg</file>
+        <file>images/wei.jpg</file>
+        <file>userlog.xml</file>
+        <file>images/bar2.png</file>
+    </qresource>
+</RCC>
