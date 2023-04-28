@@ -32,7 +32,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap resource="qrc.qrc">:/images/login.jpg</pixmap>
+    <pixmap>images/login.jpg</pixmap>
    </property>
   </widget>
   <widget class="QPushButton" name="loginPushButton">
@@ -48,11 +48,12 @@
     <font>
      <family>微软雅黑</family>
      <pointsize>10</pointsize>
+     <weight>75</weight>
      <bold>true</bold>
     </font>
    </property>
    <property name="text">
-    <string/>
+    <string>登录</string>
    </property>
    <property name="flat">
     <bool>true</bool>
@@ -97,8 +98,6 @@
    </property>
   </widget>
  </widget>
- <resources>
-  <include location="qrc.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

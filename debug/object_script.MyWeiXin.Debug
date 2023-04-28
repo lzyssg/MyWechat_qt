@@ -1,0 +1,10 @@
+debug/filecntdlg.o
+debug/filesrvdlg.o
+debug/logindialog.o
+debug/main.o
+debug/mainwindow.o
+debug/qrc_qrc.o
+debug/moc_filecntdlg.o
+debug/moc_filesrvdlg.o
+debug/moc_logindialog.o
+debug/moc_mainwindow.o

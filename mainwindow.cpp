@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    initMainWindow();//初始化窗口
 }
 
 MainWindow::~MainWindow()
@@ -19,7 +20,7 @@ void MainWindow::initMainWindow()
 {
     myUdpSocket = new QUdpSocket(this);
     myUdpPort = 23232;
-    myUdpSocket->bind(myUdpPort, QUdpSocket::ShareAddress|QUdpSocket::ReuseAddressHint);
+    myUdpSocket->bind(myUdpPort, QUdpSocket::ShareAddress|QUdpSocket::ReuseAddressHint);//ShareAddress，允许其他的服务（进程）去绑定这个IP和端口
     connect(myUdpSocket, SIGNAL(readyRead()), this, SLOT(recvAndProcessChatMsg()));
     myfsrv = new FileSrvDlg(this);
     connect(myfsrv, SIGNAL(sendFileName(QString)), this, SLOT(getSfileName(QString)));
@@ -143,11 +144,47 @@ QString MainWindow::getLocChatMsg()
 
 void MainWindow::on_searchPushButton_clicked()
 {
-
-    sendChatMsg(ChatMsg);
+    myname = this->windowTitle();
+    ui->userLabel->setText(myname);
+    sendChatMsg(OnLine);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+
     sendChatMsg(OffLine);
+}
+
+void MainWindow::getSfileName(QString fname){
+    myFileName=fname;
+    int row = ui->userListTableWidget->currentRow();
+    QString rmtName=ui->userListTableWidget->item(row,0)->text();
+    sendChatMsg(SfileName,rmtName);
+}
+
+//文件传输按钮
+void MainWindow::on_transPushButton_clicked()
+{
+    if(ui->userListTableWidget->selectedItems().isEmpty()){
+        QMessageBox::warning(0,tr("选择好友"),tr("请先选择文件接受方!"),QMessageBox::Ok);
+        return ;
+    }
+    myfsrv->show();
+}
+
+void MainWindow::recvFileName(QString name,QString hostip,QString rmtname,QString filename){
+    if(myname==rmtname){//文件发个我
+        int result=QMessageBox::information(this,tr("收到文件"),tr("好友 %1 给你发了文件： \r\n%2,是否接受?").arg(name).arg(filename),QMessageBox::Yes,QMessageBox::No);
+        if(result==QMessageBox::Yes){
+            QString fname=QFileDialog::getSaveFileName(0,tr("保存"),filename);
+            if(!fname.isEmpty()){//文件非空 接收
+                FileCntDlg *fcnt=new FileCntDlg(this);
+                fcnt->getLocPath(fname);
+                fcnt->getSrvAddr(QHostAddress(hostip));
+                fcnt->show();
+            }
+        }else{//不接受
+            sendChatMsg(RefFile,name);
+        }
+    }
 }
